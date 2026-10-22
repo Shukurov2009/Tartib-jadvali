@@ -1,0 +1,442 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tartib jadvali</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow phone column. Header with progress ring, week strip, day timeline; bottom tab bar. */
+:root{
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --bg:#F1F3F6; --surface:#FFFFFF; --ink:#0F1A2B; --muted:#586377;
+  --line:#E1E5EC; --line-strong:#C3CAD6; --accent:#0F1A2B; --on-accent:#FFFFFF;
+  --math:#3453D1; --german:#955F00; --python:#0B7A58; --school:#586377; --rest:#6B7587; --plan:#6B7587; --fun:#B83280;
+  --ok:#0B7A58; --shadow:0 8px 24px rgba(15,26,43,.16);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D131B; --surface:#161E29; --ink:#EAF0F7; --muted:#97A3B6;
+    --line:#243040; --line-strong:#3A485C; --accent:#EAF0F7; --on-accent:#0D131B;
+    --math:#8DA0FF; --german:#EDB550; --python:#42D3A3; --school:#A4AFBF; --rest:#8D99AC; --plan:#8D99AC; --fun:#F28CC0;
+    --ok:#42D3A3; --shadow:0 8px 24px rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D131B; --surface:#161E29; --ink:#EAF0F7; --muted:#97A3B6;
+  --line:#243040; --line-strong:#3A485C; --accent:#EAF0F7; --on-accent:#0D131B;
+  --math:#8DA0FF; --german:#EDB550; --python:#42D3A3; --school:#A4AFBF; --rest:#8D99AC; --plan:#8D99AC; --fun:#F28CC0;
+  --ok:#42D3A3; --shadow:0 8px 24px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.4;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:8px 112px;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--math);outline-offset:2px}
+.app{max-width:560px;margin:0 auto}
+[data-s="school"]{--c:var(--school)} [data-s="math"]{--c:var(--math)} [data-s="german"]{--c:var(--german)}
+[data-s="python"]{--c:var(--python)} [data-s="rest"]{--c:var(--rest)} [data-s="plan"]{--c:var(--plan)} [data-s="fun"]{--c:var(--fun)}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0 14px}
+.top>div:first-child{min-width:0}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,9vw,40px);line-height:1.04;letter-spacing:-.02em;margin:8px 0 6px;text-wrap:balance}
+.sub{color:var(--muted);font-size:15px;line-height:1.35}
+.sub b{color:var(--ink);font-weight:600}
+.ring{position:relative;width:76px;height:76px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .bg{stroke:var(--line)} .ring .fg{stroke:var(--ok);transition:stroke-dashoffset .4s ease}
+.ring .n{position:absolute;inset:0;display:grid;place-items:center;font:500 15px var(--mono);font-variant-numeric:tabular-nums}
+
+.wk{display:flex;align-items:center;justify-content:space-between;margin:6px 0 8px}
+.wk span{font-weight:600;font-size:14px;color:var(--muted)}
+.nav{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:16px}
+.day{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:9px 0 9px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.day small{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted)}
+.day b{font:700 18px/1 var(--display)}
+.day .bar{width:58%;height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+.day .bar i{display:block;height:100%;background:var(--ok)}
+.day.today{border-color:var(--ink)}
+.day[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.day[aria-pressed="true"] small{color:inherit;opacity:.75}
+.day[aria-pressed="true"] .bar{background:color-mix(in srgb,var(--on-accent) 30%,transparent)}
+.day[aria-pressed="true"] .bar i{background:var(--on-accent)}
+
+.blocks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.block{display:grid;grid-template-columns:50px minmax(0,1fr) 40px;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 12px 14px 14px;--c:var(--rest)}
+.t{font:500 14px/1.2 var(--mono);font-variant-numeric:tabular-nums;padding-top:2px}
+.t span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.tagrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--c);line-height:1}
+.tag::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+.now-pill{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c)}
+.block h3{margin:0;font:600 17px/1.25 var(--display);text-wrap:balance}
+.block p{margin:5px 0 0;color:var(--muted);font-size:14px;line-height:1.45}
+.dur{display:block;margin-top:8px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chk{width:40px;height:40px;border-radius:50%;border:2px solid var(--line-strong);background:transparent;display:grid;place-items:center;color:transparent;transition:background .15s,border-color .15s}
+.chk svg{width:20px;height:20px}
+.block.done{background:transparent}
+.block.done h3{color:var(--muted);text-decoration:line-through}
+.block.done .chk{background:var(--c);border-color:var(--c);color:var(--bg)}
+.block.now{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 16%,transparent)}
+.empty-note{margin:18px 0 0;text-align:center;color:var(--ok);font-weight:600}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.panel h2{font:700 20px/1.2 var(--display);margin:0 0 12px}
+.panel h2.small{font-size:16px}
+.wrow{display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:12px;align-items:center;padding:9px 0;font-size:15px}
+.wrow+.wrow{border-top:1px solid var(--line)}
+.wrow em{font-style:normal;font:500 13px var(--mono);color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.meter{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:99px;background:var(--c,var(--ok))}
+.srow{padding:12px 0}
+.srow+.srow{border-top:1px solid var(--line)}
+.srow .l{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-weight:600}
+.srow .l span:last-child{font:500 13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+
+.set{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0}
+.set+.set{border-top:1px solid var(--line)}
+.set div{min-width:0}
+.set b{display:block;font-weight:600}
+.set small{display:block;color:var(--muted);font-size:13px;line-height:1.4;margin-top:2px}
+.sw{width:50px;height:30px;border-radius:99px;border:none;background:var(--line-strong);position:relative;flex:none;transition:background .2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw[aria-checked="true"]{background:var(--ok)}
+.sw[aria-checked="true"]::after{transform:translateX(20px)}
+.btn{border:none;background:var(--accent);color:var(--on-accent);border-radius:12px;padding:12px 16px;font-weight:600;font-size:15px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong)}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.note{font-size:14px;color:var(--muted);line-height:1.5;margin:0}
+.note+.note{margin-top:8px}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);
+  padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));z-index:20}
+.tabs div{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.tab{border:none;background:transparent;border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted)}
+.tab svg{width:22px;height:22px}
+.tab[aria-selected="true"]{color:var(--ink);background:var(--bg)}
+
+.toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 10px);max-width:528px;margin:0 auto;
+  background:var(--accent);color:var(--on-accent);border-radius:16px;padding:14px 16px;z-index:40;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start;text-align:left;border:none;width:auto}
+.toast b{display:block;font:700 16px/1.25 var(--display)}
+.toast span{display:block;font-size:14px;opacity:.85;margin-top:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app">
+  <section id="v-day" aria-label="Kun jadvali">
+    <div class="top">
+      <div>
+        <div class="eyebrow" id="eyebrow"></div>
+        <h1 id="h1">Bugun</h1>
+        <div class="sub" id="sub"></div>
+      </div>
+      <div class="ring" aria-hidden="true">
+        <svg viewBox="0 0 76 76"><circle class="bg" cx="38" cy="38" r="32" fill="none" stroke-width="7"/><circle class="fg" id="ringfg" cx="38" cy="38" r="32" fill="none" stroke-width="7" stroke-linecap="round" stroke-dasharray="201.06" stroke-dashoffset="201.06"/></svg>
+        <div class="n" id="ringn"></div>
+      </div>
+    </div>
+    <div class="wk">
+      <button class="nav" id="prev" aria-label="Oldingi hafta"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span id="wklabel"></span>
+      <button class="nav" id="next" aria-label="Keyingi hafta"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="strip" id="strip"></div>
+    <ul class="blocks" id="blocks"></ul>
+    <p class="empty-note" id="alldone" hidden>Kun tugadi. Barakalla!</p>
+  </section>
+
+  <section id="v-week" aria-label="Hafta" hidden>
+    <div class="top"><div><div class="eyebrow" id="weyebrow"></div><h1>Hafta</h1><div class="sub">Qaysi kunda nima qilding.</div></div></div>
+    <div class="panel"><h2 class="small">Kunlar</h2><div id="wdays"></div></div>
+    <div class="panel"><h2 class="small">Uyda o'qish va xordiq</h2><div id="wsubj"></div></div>
+  </section>
+
+  <section id="v-set" aria-label="Sozlamalar" hidden>
+    <div class="top"><div><div class="eyebrow">Eslatmalar</div><h1>Sozlamalar</h1></div></div>
+    <div class="panel">
+      <div class="set"><div><b>5 daqiqa oldin ham eslat</b><small>Har dars boshlanishidan oldin xabar chiqadi.</small></div><button class="sw" id="sw-pre" role="switch" aria-checked="true" aria-label="5 daqiqa oldin eslat"></button></div>
+      <div class="set"><div><b>Ovoz va tebranish</b><small>Eslatma chiqqanda telefon tovush chiqaradi.</small></div><button class="sw" id="sw-sound" role="switch" aria-checked="true" aria-label="Ovoz va tebranish"></button></div>
+      <div class="set"><div><b>Ekran o'chmasin</b><small>Ilova ochiq tursa va ekran yonib tursa, eslatmalar o'z vaqtida keladi.</small></div><button class="sw" id="sw-wake" role="switch" aria-checked="false" aria-label="Ekran o'chmasin"></button></div>
+      <div class="btns">
+        <button class="btn" id="btn-test">Eslatmani sinab ko'r</button>
+        <button class="btn ghost" id="btn-notif">Telefon xabarini yoq</button>
+      </div>
+      <p class="note" id="notif-state" style="margin-top:12px"></p>
+    </div>
+    <div class="panel">
+      <h2 class="small">Muhim</h2>
+      <p class="note">Eslatma faqat bu sahifa ochiq turganda keladi. Sahifa yopilsa, eslatma kelmaydi.</p>
+      <p class="note">Sahifa yopiq bo'lsa ham eslatma kerak bo'lsa, telefon budilnigini asosiy vaqtlarga qo'ying: 07:15, 13:00 va 14:00.</p>
+      <p class="note" id="save-state"></p>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Bo'limlar"><div>
+  <button class="tab" role="tab" aria-selected="true" data-tab="day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>Jadval</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Hafta</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8z"/><path d="M10.3 20a2 2 0 0 0 3.4 0"/></svg>Eslatma</button>
+</div></nav>
+<div id="toastbox"></div>
+
+<script>
+(function(){
+"use strict";
+var SUBJ={school:"Maktab",math:"Matematika",german:"Nemis tili",python:"Python",rest:"Uy va dam",fun:"Xordiq",plan:"Reja"};
+var DAYN=["Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba","Yakshanba"];
+var DAYS=["Du","Se","Ch","Pa","Ju","Sh","Ya"];
+var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+
+function B(s,e,subj,title,task,circle){return {id:subj[0]+s.replace(":",""),s:s,e:e,subj:subj,title:title,task:task||"",circle:!!circle};}
+
+var PY="Python daftaridan navbatdagi darsni och. Darsni o'qi, kodni o'zing yozib ko'r, keyin vazifalarni bajar.";
+var MT=["To'garak mavzusini daftarga qayta yoz. Uyga vazifani bajar, keyin 5 ta qo'shimcha misol yech.","Oldingi mavzudan 10 ta masala yech. Qiyin chiqqanlarini belgilab qo'y.","To'garak vazifasini bajar va 5 ta qo'shimcha misol yech. Formulalarni daftarga yoz.","Qiyin masalalarni qayta yech. Formulalarni takrorla.","Uyga vazifani bajar. Shu haftadagi xatolaringni qayta yech.","Hafta mavzularini takrorla. 10 ta aralash masala yech.","Hafta takrori: eng qiyin 3 mavzuni qayta o'rgan va aralash masalalar yech."];
+var GE=["20 ta yangi so'zni artikli bilan yodla. 10 ta gap yoz.","To'garak vazifasini bajar. 15 ta yangi so'z yodla.","Grammatika takrori. 10 ta gap yoz va ovoz chiqarib o'qi.","Vazifani bajar. 10 ta gapni ovoz chiqarib ayt.","Hafta so'zlarini takrorla. Qisqa matn o'qi va tarjima qil.","Vazifani bajar. Hafta so'zlaridan o'zingga mini-test qil.","Hafta takrori: so'zlar testi va grammatika. 1 ta qisqa matn yoz."];
+
+function build(i){
+  var L=[];
+  if(i<=5){
+    L.push(B("07:15","08:00","rest","Tayyorlan va yo'lga chiq","Maktabga kech qolma."));
+    L.push(B("08:00","12:30","school","Maktab","Darsda faol bo'l. Savollaringni daftarga yoz."));
+  }
+  if(i===0||i===2||i===4){
+    L.push(B("13:00","14:00","rest","Uyga kel, ovqatlan, dam ol","14:00 da matematikaga chiqish kerak."));
+    L.push(B("14:00","14:30","rest","Matematika to'garagiga yo'l","Daftar va ruchkani unutma."));
+    L.push(B("14:30","16:30","math","Matematika to'garagi","Mavzuni diqqat bilan yoz. Tushunmaganingni so'ra.",true));
+    L.push(B("16:30","17:00","rest","Uyga yo'l","Biroz dam ol."));
+    L.push(B("17:00","17:45","rest","Ovqat va dam","Telefonsiz dam ol."));
+    L.push(B("17:45","19:45","math","Matematika: uyga vazifa",MT[i]));
+    L.push(B("19:45","20:45","fun","Xordiq chiqarish","Kechki ovqat, serial, o'yin yoki do'stlar bilan suhbat."));
+    L.push(B("20:45","22:15","german","Nemis tili: uyga vazifa",GE[i]));
+    L.push(B("22:15","23:45","python","Python",PY));
+    L.push(B("23:45","24:00","plan","Ertangi kunga tayyorlan","Sumka va daftarlarni tayyorla. Uxlashga yot."));
+  } else if(i===1||i===3||i===5){
+    L.push(B("12:30","13:00","rest","Tushlik va yo'lga chiqish","13:30 da nemis tili to'garagi boshlanadi."));
+    L.push(B("13:00","13:30","rest","Nemis tili to'garagiga yo'l","Daftar va lug'atni unutma."));
+    L.push(B("13:30","16:00","german","Nemis tili to'garagi","Yangi so'zlarni daftarga yoz. Gapirishga harakat qil.",true));
+    L.push(B("16:00","16:30","rest","Uyga yo'l","Biroz dam ol."));
+    L.push(B("16:30","17:15","rest","Ovqat va dam","Telefonsiz dam ol."));
+    L.push(B("17:15","19:15","math","Matematika",MT[i]));
+    L.push(B("19:15","20:15","fun","Xordiq chiqarish","Kechki ovqat, serial, o'yin yoki do'stlar bilan suhbat."));
+    L.push(B("20:15","21:45","german","Nemis tili: uyga vazifa",GE[i]));
+    L.push(B("21:45","23:15","python","Python",PY));
+    L.push(B("23:15","23:45","fun","Kichik xordiq","Musiqa tingla yoki telefon ko'r."));
+    L.push(B("23:45","24:00","plan","Ertangi kunga tayyorlan","Sumka va daftarlarni tayyorla. Uxlashga yot."));
+  } else {
+    L.push(B("09:00","11:00","rest","Uy ishlari","Xonani yig'ishtir, kerakli ishlarni qil."));
+    L.push(B("11:00","13:00","math","Matematika: hafta takrori",MT[6]));
+    L.push(B("13:00","14:30","rest","Tushlik va dam","Yaxshilab dam ol."));
+    L.push(B("14:30","16:00","german","Nemis tili: hafta takrori",GE[6]));
+    L.push(B("16:00","17:30","fun","Xordiq chiqarish","Sayr qil, do'stlar yoki oila bilan vaqt o'tkaz."));
+    L.push(B("17:30","19:30","python","Python: loyiha","Shu hafta o'rganganlaringni birlashtirib bitta dastur yoz."));
+    L.push(B("19:30","21:00","fun","Kechki ovqat va xordiq","Oila bilan ovqatlan, film ko'r."));
+    L.push(B("21:00","21:20","plan","Haftani sarhisob qil","Nimani uddaladim? Kelasi hafta nimani yaxshilayman?"));
+  }
+  return L;
+}
+var SCH=[];for(var q=0;q<7;q++)SCH.push(build(q));
+
+function two(n){return n<10?"0"+n:""+n;}
+function dkey(d){return d.getFullYear()+"-"+two(d.getMonth()+1)+"-"+two(d.getDate());}
+function dow(d){return (d.getDay()+6)%7;}
+function mon(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-dow(x));return x;}
+function addd(d,n){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()+n);return x;}
+function tm(s){var p=s.split(":");return +p[0]*60+ +p[1];}
+function fmtm(m){var h=Math.floor(m/60),r=m%60;if(!h)return r+" daq";return r?h+" s "+r+" daq":h+" s";}
+function sched(d){return SCH[dow(d)];}
+
+var state={done:{},settings:{pre:true,sound:true,wake:false},updated:0};
+var LS="tartib-v1";
+try{var raw=localStorage.getItem(LS);if(raw){var o=JSON.parse(raw);if(o&&o.done){state.done=o.done;state.settings=Object.assign(state.settings,o.settings||{});state.updated=o.updated||0;}}}catch(e){}
+(function prune(){var cut=dkey(addd(new Date(),-150));Object.keys(state.done).forEach(function(k){if(k.slice(0,10)<cut)delete state.done[k];});})();
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}}
+
+var today=new Date();var sel=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+var tab="day";var ref=null,cloud=false,saving=false,pend=false,timer=0;
+
+function queueSave(){
+  state.updated=Date.now();saveLocal();
+  if(!ref)return;
+  clearTimeout(timer);timer=setTimeout(flush,600);
+}
+function flush(){
+  if(!ref)return;
+  if(saving){pend=true;return;}
+  saving=true;
+  var p;
+  try{p=ref.set({done:state.done,settings:state.settings,updated:state.updated});}catch(e){saving=false;return;}
+  p.then(function(){},function(){}).then(function(){saving=false;if(pend){pend=false;flush();}});
+}
+function initCloud(){
+  try{
+    if(!window.claude||!window.claude.use)return;
+    Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+      var db=r[0],user=r[1];if(!db||!user)return null;
+      return Promise.resolve(user.id()).then(function(uid){
+        if(!uid)return;
+        ref=db.doc("data/users/"+uid+"/ticks");cloud=true;renderSettings();
+        ref.onSnapshot(function(snap){
+          if(snap.metadata&&snap.metadata.hasPendingWrites)return;
+          var d=snap.exists?snap.data():null;
+          if(d&&(d.updated||0)>(state.updated||0)){
+            state.done=d.done||{};state.settings=Object.assign({},state.settings,d.settings||{});state.updated=d.updated;
+            saveLocal();renderAll();applyWake();
+          }else if(!d&&(Object.keys(state.done).length||state.updated)){queueSave();}
+        },function(){cloud=false;ref=null;renderSettings();});
+      });
+    }).catch(function(){});
+  }catch(e){}
+}
+
+var $=function(id){return document.getElementById(id);};
+var CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+function counts(d){var k=dkey(d),L=sched(d),n=0;L.forEach(function(b){if(state.done[k+"|"+b.id])n++;});return {done:n,total:L.length};}
+function isToday(d){return dkey(d)===dkey(new Date());}
+
+function renderHeader(){
+  var c=counts(sel),t=isToday(sel),now=new Date();
+  $("eyebrow").textContent=DAYN[dow(sel)]+", "+sel.getDate()+"-"+MON[sel.getMonth()];
+  $("h1").textContent=t?"Bugun":DAYN[dow(sel)];
+  var nm=now.getHours()*60+now.getMinutes(),L=sched(sel),cur=null,nxt=null;
+  if(t){L.forEach(function(b){var s=tm(b.s),e=tm(b.e);if(s<=nm&&nm<e)cur=b;else if(s>nm&&!nxt)nxt=b;});}
+  var sub;
+  if(t&&cur)sub="Hozir: <b>"+cur.title+"</b> ("+cur.s+"–"+cur.e+")";
+  else if(t&&nxt)sub="Keyingisi: <b>"+nxt.title+"</b>, "+nxt.s+" da ("+fmtm(tm(nxt.s)-nm)+" dan keyin)";
+  else if(t)sub="Bugungi jadval tugadi.";
+  else sub=c.total+" ta ish rejalashtirilgan.";
+  $("sub").innerHTML=sub;
+  var f=c.total?c.done/c.total:0;
+  $("ringfg").style.strokeDashoffset=(201.06*(1-f)).toFixed(2);
+  $("ringn").textContent=c.done+"/"+c.total;
+  $("alldone").hidden=!(c.total&&c.done===c.total);
+}
+function renderStrip(){
+  var m=mon(sel),e=addd(m,6);
+  $("wklabel").textContent=m.getDate()+(m.getMonth()!==e.getMonth()?" "+MON[m.getMonth()]:"")+" – "+e.getDate()+" "+MON[e.getMonth()];
+  var h="";
+  for(var i=0;i<7;i++){var d=addd(m,i),c=counts(d),pr=sel.getTime()===d.getTime();
+    h+='<button class="day'+(isToday(d)?" today":"")+'" data-d="'+dkey(d)+'" aria-pressed="'+pr+'" aria-label="'+DAYN[i]+", "+d.getDate()+'"><small>'+DAYS[i]+'</small><b>'+d.getDate()+'</b><span class="bar"><i style="width:'+Math.round(c.total?100*c.done/c.total:0)+'%"></i></span></button>';}
+  $("strip").innerHTML=h;
+}
+function renderList(){
+  var k=dkey(sel),t=isToday(sel),now=new Date(),nm=now.getHours()*60+now.getMinutes(),h="";
+  sched(sel).forEach(function(b){
+    var s=tm(b.s),e=tm(b.e),dn=!!state.done[k+"|"+b.id],cur=t&&s<=nm&&nm<e;
+    h+='<li class="block'+(dn?" done":"")+(cur?" now":"")+'" data-s="'+b.subj+'">'
+      +'<div class="t">'+b.s+'<span>'+b.e+'</span></div>'
+      +'<div><div class="tagrow"><span class="tag">'+SUBJ[b.subj]+'</span>'+(cur?'<span class="now-pill">Hozir</span>':'')+'</div>'
+      +'<h3>'+b.title+'</h3>'+(b.task?'<p>'+b.task+'</p>':'')+'<span class="dur">'+fmtm(e-s)+'</span></div>'
+      +'<button class="chk" data-id="'+b.id+'" role="checkbox" aria-checked="'+dn+'" aria-label="Bajarildi: '+b.title+'">'+CHECK+'</button></li>';
+  });
+  $("blocks").innerHTML=h;
+}
+function renderWeek(){
+  var m=mon(sel),e=addd(m,6);
+  $("weyebrow").textContent=m.getDate()+" "+MON[m.getMonth()]+" – "+e.getDate()+" "+MON[e.getMonth()];
+  var h="",pl={math:0,german:0,python:0,fun:0},dn={math:0,german:0,python:0,fun:0};
+  for(var i=0;i<7;i++){var d=addd(m,i),c=counts(d),k=dkey(d);
+    h+='<div class="wrow"><span>'+DAYN[i]+'</span><span class="meter"><i style="width:'+Math.round(c.total?100*c.done/c.total:0)+'%"></i></span><em>'+c.done+"/"+c.total+'</em></div>';
+    sched(d).forEach(function(b){if(pl[b.subj]!==undefined&&!b.circle){var x=tm(b.e)-tm(b.s);pl[b.subj]+=x;if(state.done[k+"|"+b.id])dn[b.subj]+=x;}});}
+  $("wdays").innerHTML=h;
+  var s="";["math","german","python","fun"].forEach(function(j){
+    s+='<div class="srow" data-s="'+j+'"><div class="l"><span>'+SUBJ[j]+'</span><span>'+fmtm(dn[j])+" / "+fmtm(pl[j])+'</span></div><div class="meter"><i style="width:'+Math.round(pl[j]?100*dn[j]/pl[j]:0)+'%"></i></div></div>';});
+  $("wsubj").innerHTML=s;
+}
+function setSw(id,on){$(id).setAttribute("aria-checked",on?"true":"false");}
+function renderSettings(){
+  setSw("sw-pre",state.settings.pre);setSw("sw-sound",state.settings.sound);setSw("sw-wake",state.settings.wake);
+  var ns="";
+  if(!("Notification" in window))ns="Bu oynada telefon xabari ishlamaydi. Eslatmalar ekranda chiqadi.";
+  else if(Notification.permission==="granted")ns="Telefon xabari yoqilgan.";
+  else if(Notification.permission==="denied")ns="Telefon xabari o'chirilgan. Eslatmalar ekranda chiqadi.";
+  else ns="Telefon xabari hali yoqilmagan. Tugmani bosib ko'ring. Ishlamasa, eslatma ekranda chiqadi.";
+  $("notif-state").textContent=ns;
+  $("save-state").textContent=cloud?"Tick belgilaringiz hisobingizda saqlanadi.":"Tick belgilaringiz shu telefonning ichida saqlanadi.";
+}
+function renderAll(){renderHeader();renderStrip();renderList();renderWeek();renderSettings();}
+
+/* tabs */
+function showTab(t){tab=t;
+  $("v-day").hidden=t!=="day";$("v-week").hidden=t!=="week";$("v-set").hidden=t!=="set";
+  document.querySelectorAll(".tab").forEach(function(b){b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false");});
+  window.scrollTo(0,0);
+}
+document.querySelectorAll(".tab").forEach(function(b){b.addEventListener("click",function(){showTab(b.dataset.tab);});});
+$("strip").addEventListener("click",function(e){var b=e.target.closest(".day");if(!b)return;var p=b.dataset.d.split("-");sel=new Date(+p[0],+p[1]-1,+p[2]);renderAll();});
+$("prev").addEventListener("click",function(){sel=addd(sel,-7);renderAll();});
+$("next").addEventListener("click",function(){sel=addd(sel,7);renderAll();});
+$("blocks").addEventListener("click",function(e){
+  var b=e.target.closest(".chk");if(!b)return;
+  var k=dkey(sel)+"|"+b.dataset.id;
+  if(state.done[k])delete state.done[k];else state.done[k]=1;
+  queueSave();renderHeader();renderStrip();renderList();renderWeek();
+});
+
+/* reminders */
+var actx=null;
+function beep(){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    if(actx.state==="suspended")actx.resume();
+    [0,0.22].forEach(function(dt,i){var o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=i?988:784;
+      g.gain.setValueAtTime(0.0001,actx.currentTime+dt);g.gain.exponentialRampToValueAtTime(0.25,actx.currentTime+dt+0.03);g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+dt+0.35);
+      o.connect(g);g.connect(actx.destination);o.start(actx.currentTime+dt);o.stop(actx.currentTime+dt+0.4);});
+  }catch(e){}
+}
+var toastTimer=0;
+function toast(title,body){
+  var box=$("toastbox");
+  box.innerHTML='<button class="toast" role="alert"><div><b></b><span></span></div></button>';
+  box.querySelector("b").textContent=title;box.querySelector("span").textContent=body||"";
+  var el=box.firstChild;el.addEventListener("click",function(){box.innerHTML="";});
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){box.innerHTML="";},14000);
+}
+function notify(title,body){
+  toast(title,body);
+  if(state.settings.sound){beep();try{if(navigator.vibrate)navigator.vibrate([220,100,220]);}catch(e){}}
+  try{if("Notification" in window&&Notification.permission==="granted")new Notification(title,{body:body});}catch(e){}
+}
+var fired={};
+function check(){
+  var d=new Date(),nm=d.getHours()*60+d.getMinutes(),k=dkey(d);
+  sched(d).forEach(function(b){
+    var s=tm(b.s),key;
+    if(nm>=s&&nm<=s+1){key=k+b.id+"s";if(!fired[key]){fired[key]=1;notify("Hozir: "+b.title,b.s+"–"+b.e+(b.task?". "+b.task:""));}}
+    else if(state.settings.pre&&nm>=s-5&&nm<=s-4){key=k+b.id+"p";if(!fired[key]){fired[key]=1;notify("5 daqiqadan keyin: "+b.title,b.s+" da boshlanadi.");}}
+  });
+}
+setInterval(function(){check();if(tab==="day"&&isToday(sel)){renderHeader();renderList();}},20000);
+
+/* settings */
+function toggle(id,key,after){$(id).addEventListener("click",function(){state.settings[key]=!state.settings[key];queueSave();renderSettings();if(after)after();});}
+toggle("sw-pre","pre");toggle("sw-sound","sound");toggle("sw-wake","wake",applyWake);
+$("btn-test").addEventListener("click",function(){notify("Sinov eslatmasi","Eslatmalar shunday ko'rinadi.");});
+$("btn-notif").addEventListener("click",function(){
+  try{if("Notification" in window){var p=Notification.requestPermission();if(p&&p.then)p.then(renderSettings);}}catch(e){}
+  renderSettings();
+});
+var wl=null;
+function applyWake(){
+  try{
+    if(state.settings.wake){if(navigator.wakeLock&&!wl&&document.visibilityState==="visible"){navigator.wakeLock.request("screen").then(function(l){wl=l;l.addEventListener("release",function(){wl=null;});},function(){});}}
+    else if(wl){wl.release();wl=null;}
+  }catch(e){}
+}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){applyWake();renderAll();check();}});
+
+renderAll();initCloud();applyWake();
+})();
+</script>
+
+</body></html>
